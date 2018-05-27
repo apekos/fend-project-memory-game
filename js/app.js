@@ -13,6 +13,10 @@ const initialArray = [
 	'fa-bicycle', 'fa-bomb'
 ];
 
+let moveCount = 0;
+let clickedCard = [];
+let matchedArray = [];
+let cardMatch = false;
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -35,7 +39,7 @@ function shuffle(array) {
     return array;
 }
 
-// Create card's HTML function
+// Create card's HTML
 function generateCards(array) {
     let list = document.createElement('ul');
     list.classList.add("deck");
@@ -54,7 +58,7 @@ function generateCards(array) {
     return list;
 }
 
-// Add card's to page function
+// Add card's to page
 function renderCards() {
 	let shuffledArray = shuffle(initialArray);
 	let cards = generateCards(shuffledArray);
@@ -63,8 +67,6 @@ function renderCards() {
 }
 
 renderCards();
-
-
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -77,32 +79,27 @@ renderCards();
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-let moveCount = 0;
-let clickedCard = [];
-let matchedArray = [];
-let cardMatch = false;
-let card = document.querySelectorAll('.card');
-let icons = [];
 
+let cards = document.querySelectorAll('.card');
 
 function startGame() {
-	for (let i=0; i < card.length; i++) {
-		card[i].addEventListener('click', function() {
-			displayCard(this);
-			storeClickedCard(this);
+	cards.forEach( function(card) {
+		card.addEventListener('click', function(e) {
+			displayCard(card);
+			storeClickedCard(card);
 
 			if (clickedCard.length == 2) {
 				checkMatching(clickedCard);
 				if (cardMatch == true) {
-					doMatch(clickedCard);
+					open(clickedCard);
+					clickedCard = [];
 				} else {
-					doNotMatch(clickedCard);
+					setTimeout(function() {
+						hide(clickedCard);
+						clickedCard = [];
+					}, 1000);
 				}
-
-				//empty temp array
-				clickedCard.splice(0, 2);
 			}
-			
 			moves();
 			console.log(moveCount);
 		});
@@ -110,21 +107,21 @@ function startGame() {
 // Remove event listener, don't know how :(		
 		/*card[i].removeEventListener('click', function() {
 		});*/
-	}
+	}); 
 }
+
 function displayCard (element) {
 	element.classList.add('open', 'show');
 }
 
 function storeClickedCard(element) {
 	clickedCard.push(element);
-	//icons.push(element.firstElementChild);
 	return clickedCard;
 }
 
 // checking if two clicked cards match
 function checkMatching(array) {
-	// Checking if icons match
+// Checking if icons match
 	if (array[0].firstElementChild.className === array[1].firstElementChild.className) {
 		cardMatch = true;
 		matchedArray.push(array[0], array[1]);
@@ -136,7 +133,7 @@ function checkMatching(array) {
 }
 
 //if the cards do match, lock the cards in the open position
-function doMatch(array) {
+function open(array) {
 	array[0].classList.remove('open', 'show');
 	array[0].classList.add('match');
 	array[1].classList.remove('open', 'show');
@@ -145,12 +142,14 @@ function doMatch(array) {
 }
 
 //if the cards do not match, put them face down
-function doNotMatch(array) {
-	array[0].classList.remove('open', 'show');
+function hide(array) {
+	array.forEach( function(elem) {
+		elem.classList.remove('open', 'show');
+	});
+	/*array[0].classList.remove('open', 'show');
 	array[1].classList.remove('open', 'show');
-	return array;
+	return array;*/
 }
-
 
 function moves() {
 	moveCount += 1;
