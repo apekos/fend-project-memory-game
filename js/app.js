@@ -12,11 +12,12 @@ const initialArray = [
 	'fa-cube', 'fa-leaf',
 	'fa-bicycle', 'fa-bomb'
 ];
-
-let moveCount = 0;
 let clickedCard = [];
 let matchedArray = [];
 let cardMatch = false;
+let moves = 0;
+
+
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -61,12 +62,10 @@ function generateCards(array) {
 // Add card's to page
 function renderCards() {
 	let shuffledArray = shuffle(initialArray);
-	let cards = generateCards(shuffledArray);
+	let deck = generateCards(shuffledArray);
 	let myElement = document.querySelector('.container');
-	myElement.appendChild(cards);
+	myElement.appendChild(deck);
 }
-
-renderCards();
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -79,49 +78,19 @@ renderCards();
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-
-let cards = document.querySelectorAll('.card');
-
-function startGame() {
-	cards.forEach( function(card) {
-		card.addEventListener('click', function(e) {
-			displayCard(card);
-			storeClickedCard(card);
-
-			if (clickedCard.length == 2) {
-				checkMatching(clickedCard);
-				if (cardMatch == true) {
-					open(clickedCard);
-					clickedCard = [];
-				} else {
-					setTimeout(function() {
-						hide(clickedCard);
-						clickedCard = [];
-					}, 1000);
-				}
-			}
-			moves();
-			console.log(moveCount);
-		});
-
-// Remove event listener, don't know how :(		
-		/*card[i].removeEventListener('click', function() {
-		});*/
-	}); 
-}
-
+// Display a card after being clicked
 function displayCard (element) {
 	element.classList.add('open', 'show');
 }
 
+// Store the clicked card in an array
 function storeClickedCard(element) {
 	clickedCard.push(element);
 	return clickedCard;
 }
 
-// checking if two clicked cards match
+// Checking if clicked cards match
 function checkMatching(array) {
-// Checking if icons match
 	if (array[0].firstElementChild.className === array[1].firstElementChild.className) {
 		cardMatch = true;
 		matchedArray.push(array[0], array[1]);
@@ -132,8 +101,8 @@ function checkMatching(array) {
 	return cardMatch, matchedArray;
 }
 
-//if the cards do match, lock the cards in the open position
-function open(array) {
+// If the cards do match, lock the cards in the open position
+function openCard(array) {
 	array[0].classList.remove('open', 'show');
 	array[0].classList.add('match');
 	array[1].classList.remove('open', 'show');
@@ -141,8 +110,8 @@ function open(array) {
 	return array;
 }
 
-//if the cards do not match, put them face down
-function hide(array) {
+// If the cards do not match, put them face down
+function hideCard(array) {
 	array.forEach( function(elem) {
 		elem.classList.remove('open', 'show');
 	});
@@ -151,9 +120,44 @@ function hide(array) {
 	return array;*/
 }
 
-function moves() {
-	moveCount += 1;
-	return moveCount;
+function handleClicks() {
+	if (clickedCard.length == 2) {
+		checkMatching(clickedCard);
+		if (cardMatch == true) {
+			openCard(clickedCard);
+			clickedCard = [];
+		} else {
+			setTimeout(function() {
+				hideCard(clickedCard);
+				clickedCard = [];
+			}, 700);
+		}
+	}
+}
+
+function countMoves() {
+	moves++;
+}
+
+function startGame() {
+	renderCards();
+	let cards = document.querySelectorAll('.card');
+
+	cards.forEach( function(card) {
+		card.addEventListener('click', function(e) {
+			if (!card.classList.contains('open') && !card.classList.contains('match')) {
+				displayCard(card);
+				storeClickedCard(card);
+				handleClicks();
+				countMoves();
+			}
+			console.log(moves);
+		});
+
+// Remove event listener, don't know how :(		
+		/*card[i].removeEventListener('click', function() {
+		});*/
+	}); 
 }
 
 startGame();
