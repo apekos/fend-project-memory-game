@@ -79,14 +79,13 @@ function renderCards() {
  */
 
 // Display a card after being clicked
-function displayCard (element) {
-	element.classList.add('open', 'show');
+function displayCard (target) {
+	target.classList.add('open', 'show');
 }
 
 // Store the clicked card in an array
-function storeClickedCard(element) {
-	clickedCard.push(element);
-	return clickedCard;
+function storeClickedCard(target) {
+	clickedCard.push(target);
 }
 
 // Checking if clicked cards match
@@ -98,7 +97,6 @@ function checkMatching(array) {
 	else {
 		cardMatch = false;
 	}
-	return cardMatch, matchedArray;
 }
 
 // If the cards do match, lock the cards in the open position
@@ -107,7 +105,6 @@ function openCard(array) {
 	array[0].classList.add('match');
 	array[1].classList.remove('open', 'show');
 	array[1].classList.add('match');
-	return array;
 }
 
 // If the cards do not match, put them face down
@@ -121,8 +118,20 @@ function hideCard(array) {
 }
 
 function handleClicks() {
+	let cards = document.querySelectorAll('.card');
+	// Removing event listener from the clicked card
+	this.removeEventListener('click', handleClicks);
+	displayCard(this);
+	storeClickedCard(this);
+	
 	if (clickedCard.length == 2) {
+		cards.forEach( function(card) {
+			// Removing event listener from all the cards
+			card.removeEventListener('click', handleClicks);
+		});	
+
 		checkMatching(clickedCard);
+
 		if (cardMatch == true) {
 			openCard(clickedCard);
 			clickedCard = [];
@@ -130,9 +139,22 @@ function handleClicks() {
 			setTimeout(function() {
 				hideCard(clickedCard);
 				clickedCard = [];
-			}, 700);
+			}, 500);
 		}
+
+		setTimeout(function() {
+			// Adding event listener back to all cards
+			cards.forEach( function(card) {
+				card.addEventListener('click', handleClicks);
+			});
+			// Removing event listener from the matched cards
+			matchedArray.forEach( function(card) {
+				card.removeEventListener('click', handleClicks);
+			});
+		},500);
 	}
+	countMoves();
+	console.log(moves);
 }
 
 function countMoves() {
@@ -142,22 +164,10 @@ function countMoves() {
 function startGame() {
 	renderCards();
 	let cards = document.querySelectorAll('.card');
-
+	// Adding event listener to every card
 	cards.forEach( function(card) {
-		card.addEventListener('click', function(e) {
-			if (!card.classList.contains('open') && !card.classList.contains('match')) {
-				displayCard(card);
-				storeClickedCard(card);
-				handleClicks();
-				countMoves();
-			}
-			console.log(moves);
-		});
-
-// Remove event listener, don't know how :(		
-		/*card[i].removeEventListener('click', function() {
-		});*/
-	}); 
+		card.addEventListener('click', handleClicks);
+	});
 }
 
 startGame();
