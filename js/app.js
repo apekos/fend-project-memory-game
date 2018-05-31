@@ -20,6 +20,9 @@ let deck = [];
 let container = document.querySelector('.container');
 let moves = document.querySelector('.moves');
 let restartBtn = document.querySelector('.restart');
+let stars = document.querySelectorAll('.fa-star');
+//let secondStar = document.querySelector('.second-star');
+//let thirdStar = document.querySelector('.third-star');
 
 
 
@@ -156,6 +159,18 @@ function handleClicks() {
 		},500);
 	}
 	countMoves();
+	score();
+}
+
+// Setting the score
+function score() {
+	if (movesCounter > 24 && movesCounter <=30) {
+		stars[2].style.color = '#ebeced';
+	} else if (movesCounter > 30 && movesCounter <= 36) {
+		stars[1].style.color = '#ebeced';
+	} else if (movesCounter > 36) {
+		stars[0].style.color = '#ebeced';
+	}
 }
 
 // Counting and displaying moves
@@ -171,15 +186,17 @@ function countMoves() {
 // Restarting game when restart button clicked
 function restart() {
 	clickedCard = [];
+	stars[0].style.color = '';
+	stars[1].style.color = '';
+	stars[2].style.color = '';
 	movesCounter = 0;
-	moves.textContent = '';
+	moves.textContent = '0 Moves';
 	let deck = document.querySelector('.deck');
 	container.removeChild(deck);
 	startGame();
 }
 
 restartBtn.addEventListener('click', restart);
-
 
 // Start playing the game
 function startGame() {

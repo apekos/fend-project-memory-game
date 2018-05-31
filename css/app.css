@@ -101,9 +101,16 @@ h1 {
 .score-panel .stars li {
     list-style: none;
     display: inline-block;
+    font-size: 22px;
+}
+
+.score-panel .moves {
+    margin-left: 10px;
+    font-size: 22px;
 }
 
 .score-panel .restart {
     float: right;
     cursor: pointer;
+    font-size: 22px;
 }
