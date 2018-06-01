@@ -13,7 +13,7 @@ const initialArray = [
 	'fa-bicycle', 'fa-bomb'
 ];
 let clickedCard = [];
-let matchedArray = [];
+let matchedCards = [];
 let cardMatch = false;
 let movesCounter = 0;
 let deck = [];
@@ -22,6 +22,8 @@ let moves = document.querySelector('.moves');
 let restartBtn = document.querySelector('.restart');
 let stars = document.querySelectorAll('.fa-star');
 let timer = document.querySelector('.timer');
+let clock = 0;
+let finalTime = 0;
 
 
 
@@ -111,7 +113,7 @@ function openCard(array) {
 		elem.classList.remove('open', 'show');
 		elem.classList.add('match');
 	});
-	matchedArray.push(array[0], array[1]);
+	matchedCards.push(array[0], array[1]);
 	clickedCard = [];
 }
 
@@ -122,11 +124,13 @@ function hideCard(array) {
 	});
 	clickedCard = [];
 }
-
+// What happens when a click occurs
 function handleClicks() {
 	let cards = document.querySelectorAll('.card');
 	// Removing event listener from the clicked card
 	this.removeEventListener('click', handleClicks);
+	countMoves();
+	score();
 	displayCard(this);
 	storeClickedCard(this);
 	
@@ -152,23 +156,22 @@ function handleClicks() {
 				card.addEventListener('click', handleClicks);
 			});
 			// Removing event listener from the matched cards
-			matchedArray.forEach( function(card) {
+			matchedCards.forEach( function(card) {
 				card.removeEventListener('click', handleClicks);
 			});
 		},500);
 	}
-	countMoves();
-	score();
+	if (matchedCards.length == 16) {
+		endGame();		
+	}
 }
 
 // Setting the score
 function score() {
 	if (movesCounter > 24 && movesCounter <=30) {
 		stars[2].style.color = '#ebeced';
-	} else if (movesCounter > 30 && movesCounter <= 36) {
+	} else if (movesCounter > 32) {
 		stars[1].style.color = '#ebeced';
-	} else if (movesCounter > 36) {
-		stars[0].style.color = '#ebeced';
 	}
 }
 
@@ -176,7 +179,7 @@ function score() {
 function countMoves() {
 	movesCounter++;
 	if (movesCounter == 1) {
-		time();
+		time(); // Starting the timer
 		moves.textContent = movesCounter + ' Move';
 	} else if (movesCounter > 1) {
 		moves.textContent = movesCounter + ' Moves';
@@ -184,7 +187,6 @@ function countMoves() {
 }
 
 //Timer
-let clock;
 function time() {
 	let seconds = 0;
 	let minutes = 0;
@@ -200,15 +202,17 @@ function time() {
 		}
 		return num;
 	}
-		
-	timer.textContent = zero(minutes) + ':' + zero(seconds % 60);
+	
+	finalTime = zero(minutes) + ':' + zero(seconds % 60);
+	timer.textContent = finalTime;
 	}, 1000);
+	return finalTime;
 }
 
 // Restarting game when restart button clicked
 function restart() {
 	clickedCard = [];
-	stars[0].style.color = '';
+	matchedCards = [];
 	stars[1].style.color = '';
 	stars[2].style.color = '';
 	movesCounter = 0;
@@ -222,6 +226,47 @@ function restart() {
 
 restartBtn.addEventListener('click', restart);
 
+function myModal() {
+	// Get the modal
+	let modal = document.getElementById('myModal');
+
+	// Get the <span> element that closes the modal
+	let closeBtn = document.getElementsByClassName('close')[0];
+
+	// Get the final score
+	let finalScore = document.querySelector(".stars").innerHTML;
+
+	let printScore = document.querySelector('.printScore');
+	let printMoves = document.querySelector('.printMoves');
+	let printTime = document.querySelector('.printTime');
+
+	let playAgain = document.querySelector('.playAgain');
+
+	// When all cards are matched
+	printScore.innerHTML = finalScore;
+	printMoves.innerHTML = movesCounter;
+	printTime.innerHTML = finalTime;
+
+	modal.style.display = "block";
+
+	// When the user clicks on <span> (x), close the modal
+	closeBtn.onclick = function() {
+	    modal.style.display = "none";
+	};
+
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+	    if (event.target == modal) {
+	        modal.style.display = "none";
+	    }
+	};
+
+	playAgain.onclick = function() {
+	    modal.style.display = "none";
+	    restart();
+	};
+}
+
 // Start playing the game
 function startGame() {
 	createDeck();
@@ -230,6 +275,11 @@ function startGame() {
 	cards.forEach( function(card) {
 		card.addEventListener('click', handleClicks);
 	});
+}
+
+function endGame() {
+	clearInterval(clock);
+	myModal();
 }
 
 startGame();
