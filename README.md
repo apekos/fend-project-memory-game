@@ -2,9 +2,13 @@
 
 ## Table of Contents
 
+* [Description](#description)
 * [Instructions](#instructions)
 * [Credits](#credits)
 * [Contributing](#contributing)
+
+## Description
+This is a Udacity Front End Nanodegree project.
 
 ## Instructions
 
