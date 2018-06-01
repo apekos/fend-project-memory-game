@@ -8,11 +8,11 @@
 
 ## Instructions
 
-The cards in the deck are shuffled.
-Click on a card to show it.
-Click on a second card to match them.
-The game is over when all the cards have been matched.
-Click on the reset icon to start a new game.
+* The cards in the deck are shuffled.
+* Click on a card to show it.
+* Click on a second card to match them.
+* The game is over when all the cards have been matched.
+* Click on the reset icon to start a new game.
 
 ## Credits
 
