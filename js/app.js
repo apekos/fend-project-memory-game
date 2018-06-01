@@ -21,8 +21,7 @@ let container = document.querySelector('.container');
 let moves = document.querySelector('.moves');
 let restartBtn = document.querySelector('.restart');
 let stars = document.querySelectorAll('.fa-star');
-//let secondStar = document.querySelector('.second-star');
-//let thirdStar = document.querySelector('.third-star');
+let timer = document.querySelector('.timer');
 
 
 
@@ -177,10 +176,33 @@ function score() {
 function countMoves() {
 	movesCounter++;
 	if (movesCounter == 1) {
+		time();
 		moves.textContent = movesCounter + ' Move';
 	} else if (movesCounter > 1) {
 		moves.textContent = movesCounter + ' Moves';
 	}
+}
+
+//Timer
+let clock;
+function time() {
+	let seconds = 0;
+	let minutes = 0;
+
+	clock = setInterval(function(){
+		seconds++;
+		minutes = Math.floor(seconds / 60);
+
+	function zero(num) {
+		if (num < 10) {
+			num = '0' + num;
+			return num;
+		}
+		return num;
+	}
+		
+	timer.textContent = zero(minutes) + ':' + zero(seconds % 60);
+	}, 1000);
 }
 
 // Restarting game when restart button clicked
@@ -190,6 +212,8 @@ function restart() {
 	stars[1].style.color = '';
 	stars[2].style.color = '';
 	movesCounter = 0;
+	clearInterval(clock);
+	timer.textContent = '00:00';
 	moves.textContent = '0 Moves';
 	let deck = document.querySelector('.deck');
 	container.removeChild(deck);
