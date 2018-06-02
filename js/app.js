@@ -182,8 +182,12 @@ function countMoves() {
 	movesCounter++;
 	let move = Math.floor(movesCounter/2);
 
+	// Starting the timer
+	if (movesCounter == 1) {
+		time();
+	}
+
 	if (move == 1) {
-		time(); // Starting the timer
 		moves.textContent = move + ' Move';
 	} else if (movesCounter > 1) {
 		moves.textContent = move + ' Moves';
