@@ -89,6 +89,7 @@ function createDeck() {
 
 // Display a card after being clicked
 function displayCard (target) {
+	target.classList.remove('close');
 	target.classList.add('open', 'show');
 }
 
@@ -121,6 +122,7 @@ function openCard(array) {
 function hideCard(array) {
 	array.forEach( function(elem) {
 		elem.classList.remove('open', 'show');
+		elem.classList.add('close');
 	});
 	clickedCard = [];
 }
@@ -242,12 +244,15 @@ function myModal() {
 
 	let playAgain = document.querySelector('.playAgain');
 
-	// When all cards are matched
+	// When all cards are matched get final statistics
 	printScore.innerHTML = finalScore;
 	printMoves.innerHTML = movesCounter;
 	printTime.innerHTML = finalTime;
 
-	modal.style.display = "block";
+	// Display the modal
+	setTimeout(function() {
+		modal.style.display = "block";
+	}, 200);
 
 	// When the user clicks on <span> (x), close the modal
 	closeBtn.onclick = function() {
