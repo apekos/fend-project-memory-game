@@ -8,7 +8,16 @@
 * [Contributing](#contributing)
 
 ## Description
+
 This is a Udacity Front End Nanodegree project.
+
+## Preview
+
+You can play the game here: https://apekos.github.io/fend-project-memory-game/.
+
+## Install
+
+Download the zip file or clone via Github.
 
 ## Instructions
 
@@ -20,7 +29,7 @@ This is a Udacity Front End Nanodegree project.
 
 ## Credits
 
-I have used a shuffle function from: http://stackoverflow.com/a/2450976
+I have used a shuffle function from: http://stackoverflow.com/a/2450976.
 
 ## Contributing
 
@@ -28,3 +37,8 @@ This repository is a Udacity Front End Nanodegree project. Pull requests (most l
 
 
 For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+
+### Dependencies
+
+* [Font Awesome](https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css).
+* [Google Fonts](https://fonts.googleapis.com/css?family=Coda).
