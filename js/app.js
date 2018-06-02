@@ -180,11 +180,13 @@ function score() {
 // Counting and displaying moves
 function countMoves() {
 	movesCounter++;
-	if (movesCounter == 1) {
+	let move = Math.floor(movesCounter/2);
+
+	if (move == 1) {
 		time(); // Starting the timer
-		moves.textContent = movesCounter + ' Move';
+		moves.textContent = move + ' Move';
 	} else if (movesCounter > 1) {
-		moves.textContent = movesCounter + ' Moves';
+		moves.textContent = move + ' Moves';
 	}
 }
 
