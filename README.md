@@ -3,9 +3,12 @@
 ## Table of Contents
 
 * [Description](#description)
+* [Preview](#preview)
+* [Install](#install)
 * [Instructions](#instructions)
 * [Credits](#credits)
 * [Contributing](#contributing)
+* [Dependencies](#dependencies)
 
 ## Description
 
